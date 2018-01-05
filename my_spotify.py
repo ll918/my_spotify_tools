@@ -89,11 +89,11 @@ def get_spotify_track_data(title, data, token):
         tracks_data = {}
         not_found = []
         for i in data:
-            artist = urllib.parse.quote_plus(i[0])
-            track = urllib.parse.quote_plus(i[1])
+            artist = json.dumps(urllib.parse.quote_plus(i[0]))
+            track = json.dumps(urllib.parse.quote_plus(i[1]))
             query = ''.join(
-                ['q=', 'artist:"', json.dumps(artist), '"+', 'track:"',
-                 json.dumps(track), '"&type=track&limit=1'])
+                ['q=', 'artist:"', artist, '"+', 'track:"', track,
+                 '"&type=track&limit=1'])
             url = search_endpoint + query
             r = common.get_request(url, {'Authorization': 'Bearer ' + token})
             if r.status_code == 200:
