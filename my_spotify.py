@@ -98,9 +98,10 @@ def get_spotify_track_data(title, data, token):
             r = common.get_request(url, {'Authorization': 'Bearer ' + token})
             if r.status_code == 200:
                 d = r.json()
+                print(d)
                 if d:
-                    album_info = d['tracks']['items'][0]
-                    if album_info:
+                    if d['tracks']['items'] and d['tracks']['total'] > 0:
+                        album_info = d['tracks']['items'][0]
                         album_name = album_info['album']['name']
                         album_id = album_info['album']['id']
                         album_url = album_info['album']['external_urls'][
@@ -131,8 +132,8 @@ def get_spotify_track_data(title, data, token):
                             print('track name difference')
                             print(i[0], i[1])
                             print(url)
-                            pprint(d)
-                            # pprint(tracks_data[track_id])
+                            # pprint(d)
+                            pprint(tracks_data[track_id])
                             print()
                         if i[0] not in artist_name.lower():
                             print('artist name difference')
@@ -140,7 +141,10 @@ def get_spotify_track_data(title, data, token):
                             print(url)
                             pprint(tracks_data[track_id])
                             print()
-
+                    else:
+                        print('There was a problem matching track')
+                        print(d)
+                        not_found.append(i)
                 else:
                     print('There was a problem with the request')
                     print(r)
