@@ -93,12 +93,11 @@ def get_spotify_track_data(title, data, token):
             track = json.dumps(urllib.parse.quote_plus(i[1]))
             query = ''.join(
                 ['q=', 'artist:"', artist, '"+', 'track:"', track,
-                 '"&type=track&limit=2'])
+                 '"&type=track&limit=1'])
             url = search_endpoint + query
             r = common.get_request(url, {'Authorization': 'Bearer ' + token})
             if r.status_code == 200:
                 d = r.json()
-                print(d)
                 if d:
                     if d['tracks']['items'] and d['tracks']['total'] > 0:
                         album_info = d['tracks']['items'][0]
@@ -128,22 +127,25 @@ def get_spotify_track_data(title, data, token):
                                                      'artist_id': artist_id,
                                                      'artist_name': artist_name,
                                                      'artist_url': artist_url}}
-                        if i[1] not in track_name.lower():
-                            print('track name difference')
-                            print(i[0], i[1])
-                            print(url)
-                            # pprint(d)
-                            pprint(tracks_data[track_id])
-                            print()
-                        if i[0] not in artist_name.lower():
-                            print('artist name difference')
-                            print(i[0], i[1])
-                            print(url)
-                            pprint(tracks_data[track_id])
-                            print()
+                        # # debugging block
+                        # if i[1] not in track_name.lower():
+                        #     print('track name difference')
+                        #     print(i[0], i[1])
+                        #     print(url)
+                        #     # pprint(d)
+                        #     pprint(tracks_data[track_id])
+                        #     print()
+                        # if i[0] not in artist_name.lower():
+                        #     print('artist name difference')
+                        #     print(i[0], i[1])
+                        #     print(url)
+                        #     pprint(tracks_data[track_id])
+                        #     print()
                     else:
                         print('There was a problem matching track')
+                        print(i)
                         print(d)
+                        print()
                         not_found.append(i)
                 else:
                     print('There was a problem with the request')
